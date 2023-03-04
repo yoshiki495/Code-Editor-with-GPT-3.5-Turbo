@@ -3,38 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import { functions } from '../firebase'
 
-const Home = () => {
-  const navigate = useNavigate();
-  const [output, setOutput] = useState([]);
+const CodeEditorScreen = () => {
+  const [language, setLanguage] = useState('javascript');
   const [review, setReview] = useState('');
   const [value, setValue] = useState([]);
-  const [showChatButton, setShowChatButton] = useState(false);
+  const [statement, setStatement] = useState('');
+
+  const handleLanguageChange = (event) => {
+    setLanguage(event.target.value);
+    };
 
   const handleEditorChange = (value, event) => {
     setValue(value)
   };
 
-  const handleExecute = async () => {
-    try {
-      console.log(value)
-      const body = { codeString:  value}
-      console.log(body)
-      const sendRequest = async (body) => {
-        const requestFunction = functions.httpsCallable('execute');
-        const response = await requestFunction(body);
-        return response;
-      };
-      const response = await sendRequest(body);
-      console.log(response)
-      setOutput(response.data.result);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleStatementChange = (event) => {
+    setStatement(event.target.innerText);
+  }
 
   const handleReview = async () => {
     try {
-      const body = { value:  value}
+      const body = { value:  value, statement: statement }
       const sendRequest = async (body) => {
         const requestFunction = functions.httpsCallable('review');
         const response = await requestFunction(body);
@@ -46,13 +35,6 @@ const Home = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowChatButton(true);
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const [displayedReview, setDisplayedReview] = useState("");
 
@@ -68,58 +50,80 @@ const Home = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-between items-center bg-white p-4">
-        <button className="text-gray-500 hover:text-gray-700 focus:outline-none focus:underline" onClick={() => navigate(-1)}>
-          Back
-        </button>
-        <button
-          className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-          onClick={handleExecute}
-        >
-          Execute
-        </button>
-      </div>
+    <div className="flex justify-center items-center bg-white p-4">
+    <p className="text-gray-500 hover:text-gray-700 focus:outline-none focus:underline font-medium text-2xl">
+        Code Editor with GPT-3.5 turbo
+    </p>
+    </div>
       <div className="h-full flex flex-row justify-center items-center" data-aos="zoom-y-out">
         <div className="flex-1 flex flex-col justify-center items-center p-4">
           <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="p-4 h-full flex flex-col justify-between">
-              <label htmlFor="code" className="block text-gray-700 font-bold mb-2">
+          <div className="p-4 h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+                <label htmlFor="code" className="block text-gray-700 font-bold mr-2">
                 Code Editor
-              </label>
-              <Editor
+                </label>
+                <div className="relative inline-flex">
+                <select className="appearance-none bg-gray-100 border border-gray-300 py-2 pl-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                    id="grid-state"
+                    value={language}
+                    onChange={handleLanguageChange}>
+                    <option value="javascript">JavaScript</option>
+                    <option value="typescript">TypeScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="json">JSON</option>
+                    <option value="xml">XML</option>
+                    <option value="markdown">Markdown</option>
+                    <option value="sql">SQL</option>
+                    <option value="yaml">YAML</option>
+                    <option value="dockerfile">Dockerfile</option>
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="csharp">C#</option>
+                    <option value="ruby">Ruby</option>
+                    <option value="php">PHP</option>
+                    <option value="swift">Swift</option>
+                    <option value="rust">Rust</option>
+                    <option value="perl">Perl</option>
+                </select>
+                </div>
+            </div>
+            <Editor
                 height="78vh"
                 theme="vs-dark"
-                defaultLanguage="javascript"
                 defaultValue="// some comment"
                 onChange={handleEditorChange}
-              />
+                language={language}
+            />
             </div>
           </div>
         </div>
         <div className="flex-1 flex flex-col justify-center items-center pt-4 pr-4" data-aos="zoom-y-out">
           <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="p-4 h-full">
+            <div className="p-4 h-full overflow-y-auto">
               <label htmlFor="output" className="block text-gray-700 font-bold mb-2">
-                Output
+                Error Statement
               </label>
               <div
-                id="output"
-                name="output"
+                id="statement"
+                name="statement"
                 className="w-full h-64 border border-gray-300 p-2 rounded"
-                contentEditable={false}
+                contentEditable={true}
+                onBlur={handleStatementChange}
               >
-                {output}
               </div>
               </div>
       </div>
       <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden mt-4">
-        <div className="p-4 h-full">
+        <div className="p-4 h-full overflow-y-auto">
           <label htmlFor="review" className="block text-gray-700 font-bold mb-2">
             Review
           </label>
           <div
-            id="review"
-            name="review"
+            id="review"        name="review"
             className="w-full h-64 border border-gray-300 p-2 rounded"
             contentEditable={false}
           >
@@ -128,21 +132,26 @@ const Home = () => {
         </div>
       </div>
     </div>
-    {showChatButton && (
-      <div className="fixed bottom-4 right-4" data-aos="zoom-y-out">
-        <button
-          type="button"
-          data-te-ripple-init
-          data-te-ripple-color="light"
-          className="inline-block rounded-full bg-info p-6 uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-info-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-info-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-          onClick={handleReview}>
-          お困りですか？
-        </button>
-      </div>
-    )}
-  </div>
+    <div className="fixed bottom-4 right-4" data-aos="zoom-y-out">
+    <button
+        type="button"
+        data-te-ripple-init
+        data-te-ripple-color="light"
+        className="inline-block rounded-full bg-info p-6 mr-4 uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-info-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-info-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+        onClick={handleReview}>
+        レビューをもらう
+    </button>
+    <button
+        type="button"
+        data-te-ripple-init
+        data-te-ripple-color="danger"
+        className="inline-block rounded-full bg-danger p-6 uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+        onClick={handleReview}>
+        エラーを解決する
+    </button>
+    </div>
+    </div>
 </div>
   )
 };
-
-export default Home;
+export default CodeEditorScreen;
