@@ -19,3 +19,4 @@
 - React
 - Firebase Functions/hosting
 - OpenAPI
+- Monaco Editor
