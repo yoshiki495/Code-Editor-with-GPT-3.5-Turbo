@@ -11,10 +11,10 @@ export const review = functions.https.onCall(async (data, context) => {
   const body = data;
   const value = body.value;
   
-  let prompt = value + "のコードレビューを日本語でお願いします。";
+  let prompt = value + "のコードレビューを450字以内の日本語でお願いします。";
 
   if (body.statement !== '') {
-    prompt = value + "というコードで" + body.statement + "エラーが起こるので日本語で解決方法を教えてください。";
+    prompt = value + "というコードで" + body.statement + "エラーが起こるので450字以内の日本語で解決方法を教えてください。";
   }
 
   const payload = {
