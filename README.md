@@ -2,6 +2,10 @@
 
 ### GPT-3.5 Turboを搭載したAIがコードレビュー等してくれるアプリケーション
 
+## デプロイ先
+
+[code-editor-with-gpt-turbo.web.app/](code-editor-with-gpt-turbo.web.app/)
+
 ## 開発時間
 
 ### 6h
