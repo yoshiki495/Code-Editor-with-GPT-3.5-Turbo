@@ -10,6 +10,10 @@
 
 [code-editor-with-gpt-turbo.web.app/](http://code-editor-with-gpt-turbo.web.app/)
 
+## 開発期間
+
+大学3年の春休み
+
 ## 開発時間
 
 ### 6h
