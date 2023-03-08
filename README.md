@@ -6,10 +6,6 @@
 
 [![](https://img.youtube.com/vi/RY0uuKmd36c/0.jpg)](https://www.youtube.com/watch?v=RY0uuKmd36c)
 
-## デプロイ先
-
-[code-editor-with-gpt-turbo.web.app/](http://code-editor-with-gpt-turbo.web.app/)
-
 ## 開発期間
 
 ### 大学3年の春休み
