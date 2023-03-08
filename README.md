@@ -16,6 +16,7 @@
 
 ## 使用技術
 
+- JavaScript
 - React
 - Firebase Functions/hosting
 - OpenAPI
