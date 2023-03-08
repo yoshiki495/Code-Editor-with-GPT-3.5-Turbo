@@ -8,7 +8,7 @@
 
 ## デプロイ先
 
-[code-editor-with-gpt-turbo.web.app/](http://code-editor-with-gpt-turbo.web.app/)
+[https://code-editor-with-gpt-turbo.web.app/](https://code-editor-with-gpt-turbo.web.app/)
 
 ## 開発期間
 
