@@ -2,26 +2,19 @@
 
 ### GPT-3.5 Turboを搭載したAIがコードレビュー等してくれるアプリケーション
 
-## デモ
+## デモ動画
 
 [![](https://img.youtube.com/vi/RY0uuKmd36c/0.jpg)](https://www.youtube.com/watch?v=RY0uuKmd36c)
 
-## デプロイ先
-
-[https://code-editor-with-gpt-turbo.web.app/](https://code-editor-with-gpt-turbo.web.app/)
-
-## 開発期間
+## 開発時期
 
 ### 大学3年の春休み
-
-## 開発時間
-
-### 6h
 
 ## 使用技術
 
 - JavaScript
 - React
-- Firebase Functions/hosting
-- OpenAPI
+- Firebase Functions/Hosting
+- Tailwind CSS
 - Monaco Editor
+- GPT-3.5-Turbo
